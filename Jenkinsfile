@@ -6,7 +6,13 @@ pipeline {
     stages {
           stage('Test') {
             steps {
-                sh 'make check || true'
+               sh /* WRONG! */ """
+      set +x
+      curl -H 'Token: $TOKEN' https://some.api/
+    """
+    sh /* CORRECT */ '''
+      set +x
+      curl -H 'Token: $TOKEN' https://some.api/
             }
         }
         stage('Deliver for development') {
